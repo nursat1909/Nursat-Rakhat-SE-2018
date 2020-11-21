@@ -1,5 +1,5 @@
 CREATE TABLE student (
-student_id Decimal(12)PRIMARY KEY, 
+student_id INT PRIMARY KEY, 
 student_name VARCHAR(32),
 student_surname VARCHAR(32),
 stud_gender VARCHAR(6),
@@ -9,7 +9,7 @@ city VARCHAR(32)
 );                                      --We've created this table for all information about student, students are participants of courses and meetings 
                                         --they will groupping into groups which is piece of faculty
 CREATE TABLE teacher (
-teacher_id Decimal(12) PRIMARY KEY,
+teacher_id INT PRIMARY KEY,
 teacher_name VARCHAR(32),
 teacher_surname VARCHAR(32),
 gender VARCHAR(6),
@@ -19,7 +19,7 @@ birthday DATE
 CREATE TABLE group_ (
 group_name VARCHAR(32) PRIMARY KEY,
 head VARCHAR(32),          
-student_id Decimal(12),                                  --Group is set of students that study together in same faculty. They are about 10-20, up to faculty.
+student_id INT,                                  --Group is set of students that study together in same faculty. They are about 10-20, up to faculty.
 FOREIGN KEY(student_id) REFERENCES student(student_id)   --In group we have only students.
 );
 
@@ -28,14 +28,14 @@ CREATE TABLE course (
 course_name VARCHAR(32) PRIMARY KEY,
 course_day VARCHAR(32),                  --Course doesn't depend on faculty, one or more faculties may have one course. To course participate teachers and students.
 course_time VARCHAR(5),                  --Teachers participate as leaders. 
-teacher_id Decimal(12),                  
+teacher_id INT,                  
 group_name VARCHAR(32),                  
 FOREIGN KEY(teacher_id) REFERENCES teacher(teacher_id),
 FOREIGN KEY (group_name)REFERENCES group_(group_name)
 );                                                 
 
 CREATE TABLE faculty (
-faculty_id Decimal(12),
+faculty_id INT,
 faculty_name VARCHAR(32) PRIMARY KEY,    --It is first sorting of students to some directions. In faculty we have groups. And in groups we have students.
 group_name VARCHAR(32),
 FOREIGN KEY (group_name)REFERENCES group_(group_name)
@@ -48,7 +48,7 @@ ALTER TABLE faculty ADD CONSTRAINT faculty_pkey PRIMARY KEY (faculty_id); --And 
 
 CREATE TABLE auditory (
 campus_name VARCHAR(32),
-auditory_number Decimal(12),
+auditory_number INT,
 floor Decimal (2),
 course_name VARCHAR(32),
 FOREIGN KEY (course_name)REFERENCES course(course_name),
@@ -59,8 +59,8 @@ PRIMARY KEY (auditory_number, campus_name)
 CREATE TABLE club (
 club_name VARCHAR(32) PRIMARY KEY,
 descripton TEXT,
-leader Decimal(12),
-student_id Decimal(12),
+leader INT,
+student_id INT,
 FOREIGN KEY (student_id) REFERENCES student(student_id)
 FOREIGN KEY (leader) REFERENCES student(student_id)
 );                                                                 --Clubs are group of students that created to improove hobbies.
@@ -84,8 +84,10 @@ FOREIGN KEY(group_name) REFERENCES group_(group_name)                 --We diffe
 CREATE TABLE platonus(
 login VARCHAR(32) PRIMARY KEY,
 password varchar(64),                                                --Platonus is a site that teachers mark and students will see their grades. 
-student_id Decimal(12),                                           
-FOREIGN KEY (student_id) REFERENCES student(student_id)
+student_id INT,
+course_name VARCHAR(32),                                           
+FOREIGN KEY (student_id) REFERENCES student(student_id),
+FOREIGN KEY (course_name) REFERENCES course(course_name)
 );
 
 ALTER TABLE platonus DROP COLUMN password;             --We've added incorrect column password, therefore deleting the column.
